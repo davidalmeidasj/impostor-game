@@ -2,6 +2,8 @@ import {
   selectRandomImpostor,
   selectRandomWord,
   assignWordsToPlayers,
+  calculateVotes,
+  determineWinner,
 } from '@/lib/game';
 import { Player, WordCategories } from '@/types';
 
@@ -159,6 +161,147 @@ describe('Game Logic', () => {
         expect(player.playerSession).toBe(players[index].playerSession);
         expect(player.name).toBe(players[index].name);
       });
+    });
+  });
+
+  describe('calculateVotes', () => {
+    it('should count votes correctly', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '3' },
+        { playerSession: '3', name: 'Player 3', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+      ];
+
+      const result = calculateVotes(players);
+
+      expect(result[0].playerSession).toBe('2');
+      expect(result[0].votes).toBe(2);
+      expect(result[1].playerSession).toBe('3');
+      expect(result[1].votes).toBe(1);
+      expect(result[2].playerSession).toBe('1');
+      expect(result[2].votes).toBe(0);
+    });
+
+    it('should return all players with zero votes when no one voted', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: null },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: null },
+      ];
+
+      const result = calculateVotes(players);
+
+      expect(result.every((r) => r.votes === 0)).toBe(true);
+    });
+
+    it('should include isImpostor flag in results', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '1' },
+      ];
+
+      const result = calculateVotes(players);
+      const impostorResult = result.find((r) => r.playerSession === '2');
+
+      expect(impostorResult?.isImpostor).toBe(true);
+    });
+
+    it('should sort results by votes descending', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '3' },
+        { playerSession: '2', name: 'Player 2', isImpostor: false, assignedWord: 'Word', votedFor: '3' },
+        { playerSession: '3', name: 'Player 3', isImpostor: true, assignedWord: null, votedFor: '1' },
+        { playerSession: '4', name: 'Player 4', isImpostor: false, assignedWord: 'Word', votedFor: '3' },
+      ];
+
+      const result = calculateVotes(players);
+
+      expect(result[0].votes).toBeGreaterThanOrEqual(result[1].votes);
+      expect(result[1].votes).toBeGreaterThanOrEqual(result[2].votes);
+      expect(result[2].votes).toBeGreaterThanOrEqual(result[3].votes);
+    });
+
+    it('should include player name in results', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'John', isImpostor: false, assignedWord: 'Word', votedFor: null },
+      ];
+
+      const result = calculateVotes(players);
+
+      expect(result[0].name).toBe('John');
+    });
+  });
+
+  describe('determineWinner', () => {
+    it('should return team when impostor gets majority votes', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '1' },
+        { playerSession: '3', name: 'Player 3', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+      ];
+
+      const result = determineWinner(players);
+
+      expect(result).toBe('team');
+    });
+
+    it('should return impostor when non-impostor gets most votes', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '3' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '3' },
+        { playerSession: '3', name: 'Player 3', isImpostor: false, assignedWord: 'Word', votedFor: '1' },
+      ];
+
+      const result = determineWinner(players);
+
+      expect(result).toBe('impostor');
+    });
+
+    it('should return impostor when no one votes', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: null },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: null },
+      ];
+
+      const result = determineWinner(players);
+
+      expect(result).toBe('impostor');
+    });
+
+    it('should return impostor when impostor does not get majority', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '1' },
+        { playerSession: '3', name: 'Player 3', isImpostor: false, assignedWord: 'Word', votedFor: '1' },
+        { playerSession: '4', name: 'Player 4', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+      ];
+
+      // 2 votes for impostor (player 2), 2 votes for player 1
+      // Impostor has 2 votes out of 4 total = 50%, not majority (needs > 50%)
+      const result = determineWinner(players);
+
+      expect(result).toBe('impostor');
+    });
+
+    it('should return team when impostor has clear majority', () => {
+      const players: Player[] = [
+        { playerSession: '1', name: 'Player 1', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '2', name: 'Player 2', isImpostor: true, assignedWord: null, votedFor: '1' },
+        { playerSession: '3', name: 'Player 3', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+        { playerSession: '4', name: 'Player 4', isImpostor: false, assignedWord: 'Word', votedFor: '2' },
+      ];
+
+      // 3 votes for impostor out of 4 total = 75% > 50%
+      const result = determineWinner(players);
+
+      expect(result).toBe('team');
+    });
+
+    it('should return impostor for empty players array', () => {
+      const players: Player[] = [];
+
+      const result = determineWinner(players);
+
+      expect(result).toBe('impostor');
     });
   });
 });
