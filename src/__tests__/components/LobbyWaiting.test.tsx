@@ -17,6 +17,7 @@ describe('LobbyWaiting', () => {
     currentWord: null,
     round: 0,
     winner: null,
+    locale: 'en',
   });
 
   it('should display lobby code', () => {

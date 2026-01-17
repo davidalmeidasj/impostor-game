@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Box, Typography, Button, Paper, Chip, Divider } from '@mui/material';
 import { Lobby, Player } from '@/types';
 import PlayerList from './PlayerList';
@@ -19,13 +20,14 @@ export default function GameBoard({
   onStartVoting,
   onLeaveLobby,
 }: GameBoardProps) {
+  const t = useTranslations();
   const isAdmin = lobby.createdBy === currentSession;
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h5">Jogo em Andamento</Typography>
-        <Chip label={`Round ${lobby.round}`} color="primary" />
+        <Typography variant="h5">{t('game.inProgress')}</Typography>
+        <Chip label={t('game.round', { round: lobby.round })} color="primary" />
       </Box>
 
       <Box
@@ -40,16 +42,16 @@ export default function GameBoard({
         {currentPlayer.isImpostor ? (
           <>
             <Typography variant="h4" color="error.dark" fontWeight="bold">
-              Você é o Impostor!
+              {t('game.youAreImpostor')}
             </Typography>
             <Typography variant="body1" color="error.dark" sx={{ mt: 1 }}>
-              Tente adivinhar a palavra secreta sem ser descoberto
+              {t('game.impostorHint')}
             </Typography>
           </>
         ) : (
           <>
             <Typography variant="body1" color="success.dark">
-              Sua palavra secreta é:
+              {t('game.yourSecretWord')}
             </Typography>
             <Typography
               variant="h3"
@@ -64,7 +66,7 @@ export default function GameBoard({
       </Box>
 
       <Typography variant="subtitle1" gutterBottom>
-        Jogadores ({lobby.players.length})
+        {t('game.players', { count: lobby.players.length })}
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
@@ -83,7 +85,7 @@ export default function GameBoard({
             fullWidth
             onClick={onStartVoting}
           >
-            Iniciar Votação
+            {t('game.startVoting')}
           </Button>
         )}
         <Button
@@ -92,7 +94,7 @@ export default function GameBoard({
           fullWidth
           onClick={onLeaveLobby}
         >
-          Sair do Lobby
+          {t('lobby.leaveLobby')}
         </Button>
       </Box>
     </Paper>

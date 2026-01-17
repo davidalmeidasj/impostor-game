@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { List, ListItem, ListItemText, Chip, Box } from '@mui/material';
 import { Player } from '@/types';
 
@@ -14,6 +15,8 @@ export default function PlayerList({
   adminSession,
   currentSession,
 }: PlayerListProps) {
+  const t = useTranslations();
+
   return (
     <List>
       {players.map((player) => (
@@ -31,10 +34,10 @@ export default function PlayerList({
           <ListItemText primary={player.name} />
           <Box sx={{ display: 'flex', gap: 1 }}>
             {player.playerSession === adminSession && (
-              <Chip label="Admin" color="primary" size="small" />
+              <Chip label={t('player.admin')} color="primary" size="small" />
             )}
             {player.playerSession === currentSession && (
-              <Chip label="You" color="success" size="small" />
+              <Chip label={t('player.you')} color="success" size="small" />
             )}
           </Box>
         </ListItem>

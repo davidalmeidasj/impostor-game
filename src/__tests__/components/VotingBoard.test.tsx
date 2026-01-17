@@ -15,6 +15,7 @@ describe('VotingBoard', () => {
     currentWord: 'Pizza',
     round: 1,
     winner: null,
+    locale: 'en',
   };
 
   const mockNonImpostorPlayer: Player = {
@@ -52,7 +53,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Votação')).toBeInTheDocument();
+    expect(screen.getByText('Voting')).toBeInTheDocument();
   });
 
   it('should display round number', () => {
@@ -80,7 +81,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText(/Sua palavra era: Pizza/)).toBeInTheDocument();
+    expect(screen.getByText(/Your word was: Pizza/)).toBeInTheDocument();
   });
 
   it('should show impostor message for impostor players', () => {
@@ -94,7 +95,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText(/Você é o impostor!/)).toBeInTheDocument();
+    expect(screen.getByText(/You are the impostor!/)).toBeInTheDocument();
   });
 
   it('should display other players to vote for (excluding self)', () => {
@@ -130,7 +131,7 @@ describe('VotingBoard', () => {
     expect(onVote).toHaveBeenCalledWith('player-2');
   });
 
-  it('should show Encerrar Votação button for admin', () => {
+  it('should show End Voting button for admin', () => {
     render(
       <VotingBoard
         lobby={mockLobby}
@@ -141,10 +142,10 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Encerrar Votação')).toBeInTheDocument();
+    expect(screen.getByText('End Voting')).toBeInTheDocument();
   });
 
-  it('should not show Encerrar Votação button for non-admin', () => {
+  it('should not show End Voting button for non-admin', () => {
     render(
       <VotingBoard
         lobby={mockLobby}
@@ -155,10 +156,10 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.queryByText('Encerrar Votação')).not.toBeInTheDocument();
+    expect(screen.queryByText('End Voting')).not.toBeInTheDocument();
   });
 
-  it('should call onEndVoting when clicking Encerrar Votação', () => {
+  it('should call onEndVoting when clicking End Voting', () => {
     const onEndVoting = jest.fn();
     render(
       <VotingBoard
@@ -170,7 +171,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('Encerrar Votação'));
+    fireEvent.click(screen.getByText('End Voting'));
     expect(onEndVoting).toHaveBeenCalledTimes(1);
   });
 
@@ -185,7 +186,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Votos: 0 / 3')).toBeInTheDocument();
+    expect(screen.getByText('Votes: 0 / 3')).toBeInTheDocument();
   });
 
   it('should show success message after voting', () => {
@@ -199,7 +200,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Voto registrado! Aguardando outros jogadores...')).toBeInTheDocument();
+    expect(screen.getByText('Vote registered! Waiting for other players...')).toBeInTheDocument();
   });
 
   it('should disable voting buttons after player has voted', () => {
@@ -218,7 +219,7 @@ describe('VotingBoard', () => {
     expect(janeButton).toHaveAttribute('aria-disabled', 'true');
   });
 
-  it('should show Seu voto chip on voted player', () => {
+  it('should show Your vote chip on voted player', () => {
     render(
       <VotingBoard
         lobby={mockLobby}
@@ -229,7 +230,7 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Seu voto')).toBeInTheDocument();
+    expect(screen.getByText('Your vote')).toBeInTheDocument();
   });
 
   it('should update vote count when players have voted', () => {
@@ -252,6 +253,6 @@ describe('VotingBoard', () => {
       />
     );
 
-    expect(screen.getByText('Votos: 2 / 3')).toBeInTheDocument();
+    expect(screen.getByText('Votes: 2 / 3')).toBeInTheDocument();
   });
 });

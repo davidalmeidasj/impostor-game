@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Box,
   TextField,
@@ -10,12 +11,22 @@ import {
   Paper,
   Alert,
   Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
+
+const SUPPORTED_LOCALES = ['en', 'pt-BR', 'es'] as const;
 
 export default function HomeForm() {
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
+  const t = useTranslations();
   const [name, setName] = useState('');
   const [lobbyCode, setLobbyCode] = useState('');
+  const [gameLocale, setGameLocale] = useState(locale);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -35,14 +46,14 @@ export default function HomeForm() {
       body: JSON.stringify({ playerSession, name: playerName }),
     });
     if (!response.ok) {
-      throw new Error('Failed to create user');
+      throw new Error(t('errors.failedToCreateUser'));
     }
     return response.json();
   };
 
   const handleCreateLobby = async () => {
     if (!name.trim()) {
-      setError('Please enter your name');
+      setError(t('errors.pleaseEnterName'));
       return;
     }
 
@@ -57,17 +68,17 @@ export default function HomeForm() {
       const response = await fetch('/api/lobbies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerSession, playerName: name }),
+        body: JSON.stringify({ playerSession, playerName: name, locale: gameLocale }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create lobby');
+        throw new Error(t('errors.failedToCreateLobby'));
       }
 
       const lobby = await response.json();
-      router.push(`/lobby/${lobby.lobbyId}`);
+      router.push(`/${locale}/lobby/${lobby.lobbyId}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     } finally {
       setLoading(false);
     }
@@ -75,11 +86,11 @@ export default function HomeForm() {
 
   const handleJoinLobby = async () => {
     if (!name.trim()) {
-      setError('Please enter your name');
+      setError(t('errors.pleaseEnterName'));
       return;
     }
     if (!lobbyCode.trim()) {
-      setError('Please enter lobby code');
+      setError(t('errors.pleaseEnterLobbyCode'));
       return;
     }
 
@@ -99,12 +110,12 @@ export default function HomeForm() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to join lobby');
+        throw new Error(data.error || t('errors.failedToJoinLobby'));
       }
 
-      router.push(`/lobby/${lobbyCode}`);
+      router.push(`/${locale}/lobby/${lobbyCode}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     } finally {
       setLoading(false);
     }
@@ -113,14 +124,14 @@ export default function HomeForm() {
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
       <Typography variant="h4" component="h1" gutterBottom textAlign="center">
-        Impostor Game
+        {t('home.title')}
       </Typography>
 
       <Stack spacing={3}>
         {error && <Alert severity="error">{error}</Alert>}
 
         <TextField
-          label="Your Name"
+          label={t('home.yourName')}
           variant="outlined"
           fullWidth
           value={name}
@@ -129,14 +140,31 @@ export default function HomeForm() {
         />
 
         <TextField
-          label="Lobby Code"
+          label={t('home.lobbyCode')}
           variant="outlined"
           fullWidth
           value={lobbyCode}
           onChange={(e) => setLobbyCode(e.target.value)}
           disabled={loading}
-          placeholder="Enter code to join"
+          placeholder={t('home.enterCodeToJoin')}
         />
+
+        <FormControl fullWidth>
+          <InputLabel id="game-locale-label">{t('languages.label')}</InputLabel>
+          <Select
+            labelId="game-locale-label"
+            value={gameLocale}
+            label={t('languages.label')}
+            onChange={(e) => setGameLocale(e.target.value)}
+            disabled={loading}
+          >
+            {SUPPORTED_LOCALES.map((loc) => (
+              <MenuItem key={loc} value={loc}>
+                {t(`languages.${loc}`)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button
@@ -145,7 +173,7 @@ export default function HomeForm() {
             onClick={handleJoinLobby}
             disabled={loading}
           >
-            Join Lobby
+            {t('home.joinLobby')}
           </Button>
           <Button
             variant="outlined"
@@ -153,7 +181,7 @@ export default function HomeForm() {
             onClick={handleCreateLobby}
             disabled={loading}
           >
-            Create Lobby
+            {t('home.createLobby')}
           </Button>
         </Box>
       </Stack>

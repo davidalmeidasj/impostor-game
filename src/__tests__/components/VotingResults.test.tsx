@@ -15,6 +15,7 @@ describe('VotingResults', () => {
     currentWord: 'Pizza',
     round: 1,
     winner: 'team',
+    locale: 'en',
   };
 
   const mockLobbyImpostorWon: Lobby = {
@@ -29,9 +30,10 @@ describe('VotingResults', () => {
     currentWord: 'Pizza',
     round: 1,
     winner: 'impostor',
+    locale: 'en',
   };
 
-  it('should display Resultado title', () => {
+  it('should display Result title', () => {
     render(
       <VotingResults
         lobby={mockLobbyTeamWon}
@@ -40,7 +42,7 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Resultado')).toBeInTheDocument();
+    expect(screen.getByText('Result')).toBeInTheDocument();
   });
 
   it('should display round number', () => {
@@ -55,7 +57,7 @@ describe('VotingResults', () => {
     expect(screen.getByText('Round 1')).toBeInTheDocument();
   });
 
-  it('should display Time Venceu when team wins', () => {
+  it('should display Team Won when team wins', () => {
     render(
       <VotingResults
         lobby={mockLobbyTeamWon}
@@ -64,11 +66,11 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Time Venceu!')).toBeInTheDocument();
-    expect(screen.getByText('O impostor foi descoberto!')).toBeInTheDocument();
+    expect(screen.getByText('Team Won!')).toBeInTheDocument();
+    expect(screen.getByText('The impostor was discovered!')).toBeInTheDocument();
   });
 
-  it('should display Impostor Venceu when impostor wins', () => {
+  it('should display Impostor Won when impostor wins', () => {
     render(
       <VotingResults
         lobby={mockLobbyImpostorWon}
@@ -77,8 +79,8 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Impostor Venceu!')).toBeInTheDocument();
-    expect(screen.getByText('O impostor enganou a todos!')).toBeInTheDocument();
+    expect(screen.getByText('Impostor Won!')).toBeInTheDocument();
+    expect(screen.getByText('The impostor fooled everyone!')).toBeInTheDocument();
   });
 
   it('should reveal who the impostor was', () => {
@@ -90,7 +92,7 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('O impostor era:')).toBeInTheDocument();
+    expect(screen.getByText('The impostor was:')).toBeInTheDocument();
     // Jane appears twice: in the impostor reveal and in the vote list
     expect(screen.getAllByText('Jane')).toHaveLength(2);
   });
@@ -104,7 +106,7 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('A palavra secreta era:')).toBeInTheDocument();
+    expect(screen.getByText('The secret word was:')).toBeInTheDocument();
     expect(screen.getByText('Pizza')).toBeInTheDocument();
   });
 
@@ -117,9 +119,9 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Contagem de Votos')).toBeInTheDocument();
-    expect(screen.getByText('2 votos')).toBeInTheDocument(); // Jane got 2 votes
-    expect(screen.getByText('1 voto')).toBeInTheDocument(); // John got 1 vote
+    expect(screen.getByText('Vote Count')).toBeInTheDocument();
+    expect(screen.getByText('2 votes')).toBeInTheDocument(); // Jane got 2 votes
+    expect(screen.getByText('1 vote')).toBeInTheDocument(); // John got 1 vote
   });
 
   it('should mark the impostor in the vote list', () => {
@@ -143,10 +145,10 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Mais votado')).toBeInTheDocument();
+    expect(screen.getByText('Most voted')).toBeInTheDocument();
   });
 
-  it('should show Próximo Round button for admin', () => {
+  it('should show Next Round button for admin', () => {
     render(
       <VotingResults
         lobby={mockLobbyTeamWon}
@@ -155,10 +157,10 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('Próximo Round')).toBeInTheDocument();
+    expect(screen.getByText('Next Round')).toBeInTheDocument();
   });
 
-  it('should not show Próximo Round button for non-admin', () => {
+  it('should not show Next Round button for non-admin', () => {
     render(
       <VotingResults
         lobby={mockLobbyTeamWon}
@@ -167,10 +169,10 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.queryByText('Próximo Round')).not.toBeInTheDocument();
+    expect(screen.queryByText('Next Round')).not.toBeInTheDocument();
   });
 
-  it('should call onNextRound when clicking Próximo Round', () => {
+  it('should call onNextRound when clicking Next Round', () => {
     const onNextRound = jest.fn();
     render(
       <VotingResults
@@ -180,7 +182,7 @@ describe('VotingResults', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('Próximo Round'));
+    fireEvent.click(screen.getByText('Next Round'));
     expect(onNextRound).toHaveBeenCalledTimes(1);
   });
 
@@ -202,7 +204,7 @@ describe('VotingResults', () => {
       />
     );
 
-    expect(screen.getByText('1 voto')).toBeInTheDocument();
+    expect(screen.getByText('1 vote')).toBeInTheDocument();
   });
 
   it('should display all players in vote results', () => {

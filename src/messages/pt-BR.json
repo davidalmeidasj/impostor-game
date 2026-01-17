@@ -1,0 +1,81 @@
+{
+  "home": {
+    "title": "Jogo do Impostor",
+    "yourName": "Seu Nome",
+    "lobbyCode": "Código da Sala",
+    "enterCodeToJoin": "Digite o código para entrar",
+    "joinLobby": "Entrar na Sala",
+    "createLobby": "Criar Sala"
+  },
+  "lobby": {
+    "waitingRoom": "Sala de Espera",
+    "lobbyCode": "Código da Sala",
+    "players": "Jogadores ({count}/?)",
+    "minPlayersRequired": "Mínimo de 3 jogadores necessários para iniciar o jogo",
+    "startGame": "Iniciar Jogo",
+    "leaveLobby": "Sair da Sala",
+    "notFound": "Sala não encontrada",
+    "backToHome": "Voltar para o início",
+    "notInLobby": "Você não está nesta sala"
+  },
+  "game": {
+    "inProgress": "Jogo em Andamento",
+    "round": "Rodada {round}",
+    "youAreImpostor": "Você é o Impostor!",
+    "impostorHint": "Tente adivinhar a palavra secreta sem ser descoberto",
+    "yourSecretWord": "Sua palavra secreta é:",
+    "players": "Jogadores ({count})",
+    "startVoting": "Iniciar Votação"
+  },
+  "voting": {
+    "title": "Votação",
+    "youAreImpostorHint": "Você é o impostor! Tente não ser descoberto.",
+    "yourWordWas": "Sua palavra era: {word}",
+    "votesCount": "Votos: {current} / {total}",
+    "whoIsImpostor": "Quem você acha que é o impostor?",
+    "yourVote": "Seu voto",
+    "voteRegistered": "Voto registrado! Aguardando outros jogadores...",
+    "endVoting": "Encerrar Votação"
+  },
+  "results": {
+    "title": "Resultado",
+    "teamWon": "Time Venceu!",
+    "impostorWon": "Impostor Venceu!",
+    "impostorDiscovered": "O impostor foi descoberto!",
+    "impostorFooledEveryone": "O impostor enganou a todos!",
+    "theImpostorWas": "O impostor era:",
+    "theSecretWordWas": "A palavra secreta era:",
+    "voteCount": "Contagem de Votos",
+    "voteSingular": "{count} voto",
+    "votePlural": "{count} votos",
+    "mostVoted": "Mais votado",
+    "impostor": "Impostor",
+    "nextRound": "Próxima Rodada"
+  },
+  "player": {
+    "admin": "Admin",
+    "you": "Você"
+  },
+  "errors": {
+    "pleaseEnterName": "Por favor, digite seu nome",
+    "pleaseEnterLobbyCode": "Por favor, digite o código da sala",
+    "failedToCreateUser": "Falha ao criar usuário",
+    "failedToCreateLobby": "Falha ao criar sala",
+    "failedToJoinLobby": "Falha ao entrar na sala",
+    "failedToStartGame": "Falha ao iniciar jogo",
+    "failedToStartVoting": "Falha ao iniciar votação",
+    "failedToVote": "Falha ao votar",
+    "failedToEndVoting": "Falha ao encerrar votação",
+    "failedToStartNextRound": "Falha ao iniciar próxima rodada",
+    "somethingWentWrong": "Algo deu errado"
+  },
+  "common": {
+    "loading": "Carregando..."
+  },
+  "languages": {
+    "label": "Idioma do Jogo",
+    "en": "Inglês",
+    "pt-BR": "Português (Brasil)",
+    "es": "Espanhol"
+  }
+}

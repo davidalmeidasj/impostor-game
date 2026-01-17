@@ -1,0 +1,81 @@
+{
+  "home": {
+    "title": "Impostor Game",
+    "yourName": "Your Name",
+    "lobbyCode": "Lobby Code",
+    "enterCodeToJoin": "Enter code to join",
+    "joinLobby": "Join Lobby",
+    "createLobby": "Create Lobby"
+  },
+  "lobby": {
+    "waitingRoom": "Waiting Room",
+    "lobbyCode": "Lobby Code",
+    "players": "Players ({count}/?)",
+    "minPlayersRequired": "Minimum 3 players required to start the game",
+    "startGame": "Start Game",
+    "leaveLobby": "Leave Lobby",
+    "notFound": "Lobby not found",
+    "backToHome": "Back to home",
+    "notInLobby": "You are not in this lobby"
+  },
+  "game": {
+    "inProgress": "Game In Progress",
+    "round": "Round {round}",
+    "youAreImpostor": "You are the Impostor!",
+    "impostorHint": "Try to guess the secret word without being discovered",
+    "yourSecretWord": "Your secret word is:",
+    "players": "Players ({count})",
+    "startVoting": "Start Voting"
+  },
+  "voting": {
+    "title": "Voting",
+    "youAreImpostorHint": "You are the impostor! Try not to be discovered.",
+    "yourWordWas": "Your word was: {word}",
+    "votesCount": "Votes: {current} / {total}",
+    "whoIsImpostor": "Who do you think is the impostor?",
+    "yourVote": "Your vote",
+    "voteRegistered": "Vote registered! Waiting for other players...",
+    "endVoting": "End Voting"
+  },
+  "results": {
+    "title": "Result",
+    "teamWon": "Team Won!",
+    "impostorWon": "Impostor Won!",
+    "impostorDiscovered": "The impostor was discovered!",
+    "impostorFooledEveryone": "The impostor fooled everyone!",
+    "theImpostorWas": "The impostor was:",
+    "theSecretWordWas": "The secret word was:",
+    "voteCount": "Vote Count",
+    "voteSingular": "{count} vote",
+    "votePlural": "{count} votes",
+    "mostVoted": "Most voted",
+    "impostor": "Impostor",
+    "nextRound": "Next Round"
+  },
+  "player": {
+    "admin": "Admin",
+    "you": "You"
+  },
+  "errors": {
+    "pleaseEnterName": "Please enter your name",
+    "pleaseEnterLobbyCode": "Please enter lobby code",
+    "failedToCreateUser": "Failed to create user",
+    "failedToCreateLobby": "Failed to create lobby",
+    "failedToJoinLobby": "Failed to join lobby",
+    "failedToStartGame": "Failed to start game",
+    "failedToStartVoting": "Failed to start voting",
+    "failedToVote": "Failed to vote",
+    "failedToEndVoting": "Failed to end voting",
+    "failedToStartNextRound": "Failed to start next round",
+    "somethingWentWrong": "Something went wrong"
+  },
+  "common": {
+    "loading": "Loading..."
+  },
+  "languages": {
+    "label": "Game Language",
+    "en": "English",
+    "pt-BR": "Portuguese (Brazil)",
+    "es": "Spanish"
+  }
+}

@@ -14,6 +14,7 @@ describe('GameBoard', () => {
     currentWord: 'Pizza',
     round: 1,
     winner: null,
+    locale: 'en',
   };
 
   const mockNonImpostorPlayer: Player = {
@@ -44,7 +45,7 @@ describe('GameBoard', () => {
     );
 
     expect(screen.getByText('Pizza')).toBeInTheDocument();
-    expect(screen.getByText('Sua palavra secreta é:')).toBeInTheDocument();
+    expect(screen.getByText('Your secret word is:')).toBeInTheDocument();
   });
 
   it('should display impostor message for impostor', () => {
@@ -58,7 +59,7 @@ describe('GameBoard', () => {
       />
     );
 
-    expect(screen.getByText('Você é o Impostor!')).toBeInTheDocument();
+    expect(screen.getByText('You are the Impostor!')).toBeInTheDocument();
     expect(screen.queryByText('Pizza')).not.toBeInTheDocument();
   });
 
@@ -76,7 +77,7 @@ describe('GameBoard', () => {
     expect(screen.getByText('Round 1')).toBeInTheDocument();
   });
 
-  it('should show Iniciar Votação button for admin', () => {
+  it('should show Start Voting button for admin', () => {
     render(
       <GameBoard
         lobby={mockLobby}
@@ -87,10 +88,10 @@ describe('GameBoard', () => {
       />
     );
 
-    expect(screen.getByText('Iniciar Votação')).toBeInTheDocument();
+    expect(screen.getByText('Start Voting')).toBeInTheDocument();
   });
 
-  it('should not show Iniciar Votação button for non-admin', () => {
+  it('should not show Start Voting button for non-admin', () => {
     render(
       <GameBoard
         lobby={mockLobby}
@@ -101,10 +102,10 @@ describe('GameBoard', () => {
       />
     );
 
-    expect(screen.queryByText('Iniciar Votação')).not.toBeInTheDocument();
+    expect(screen.queryByText('Start Voting')).not.toBeInTheDocument();
   });
 
-  it('should call onStartVoting when Iniciar Votação is clicked', () => {
+  it('should call onStartVoting when Start Voting is clicked', () => {
     const onStartVoting = jest.fn();
     render(
       <GameBoard
@@ -116,11 +117,11 @@ describe('GameBoard', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('Iniciar Votação'));
+    fireEvent.click(screen.getByText('Start Voting'));
     expect(onStartVoting).toHaveBeenCalledTimes(1);
   });
 
-  it('should call onLeaveLobby when Sair do Lobby is clicked', () => {
+  it('should call onLeaveLobby when Leave Lobby is clicked', () => {
     const onLeaveLobby = jest.fn();
     render(
       <GameBoard
@@ -132,7 +133,7 @@ describe('GameBoard', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('Sair do Lobby'));
+    fireEvent.click(screen.getByText('Leave Lobby'));
     expect(onLeaveLobby).toHaveBeenCalledTimes(1);
   });
 

@@ -32,8 +32,8 @@ export async function POST(
       );
     }
 
-    // Select new random word and impostor
-    const words = await readWords();
+    // Select new random word and impostor using lobby's locale
+    const words = await readWords(lobby.locale || 'en');
     const selectedWord = selectRandomWord(words);
     const impostorIndex = selectRandomImpostor(lobby.players);
 

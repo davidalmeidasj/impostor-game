@@ -1,0 +1,10 @@
+{
+  "superheroes": ["Super-Homem", "Batman", "Homem-Aranha", "Mulher-Maravilha", "Homem de Ferro", "Thor", "Hulk", "Capitão América"],
+  "brazilian_states": ["São Paulo", "Rio de Janeiro", "Bahia", "Minas Gerais", "Paraná", "Santa Catarina", "Ceará", "Pernambuco"],
+  "objects": ["Cadeira", "Telefone", "Mochila", "Notebook", "Livro", "Guarda-chuva", "Relógio", "Óculos de Sol"],
+  "human_body_parts": ["Braço", "Perna", "Coração", "Cérebro", "Estômago", "Rim", "Pulmão", "Olho"],
+  "animals": ["Cachorro", "Gato", "Elefante", "Leão", "Águia", "Golfinho", "Cobra", "Pinguim"],
+  "food": ["Pizza", "Hambúrguer", "Sushi", "Macarrão", "Taco", "Salada", "Sorvete", "Chocolate"],
+  "countries": ["Brasil", "Japão", "França", "Alemanha", "Austrália", "Canadá", "México", "Itália"],
+  "sports": ["Futebol", "Basquete", "Tênis", "Natação", "Vôlei", "Golfe", "Boxe", "Ciclismo"]
+}

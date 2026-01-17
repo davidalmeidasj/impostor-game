@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Box,
   Typography,
@@ -25,6 +26,7 @@ export default function VotingResults({
   currentSession,
   onNextRound,
 }: VotingResultsProps) {
+  const t = useTranslations();
   const isAdmin = lobby.createdBy === currentSession;
   const voteResults = calculateVotes(lobby.players);
   const impostor = lobby.players.find((p) => p.isImpostor);
@@ -33,8 +35,8 @@ export default function VotingResults({
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h5">Resultado</Typography>
-        <Chip label={`Round ${lobby.round}`} color="primary" />
+        <Typography variant="h5">{t('results.title')}</Typography>
+        <Chip label={t('game.round', { round: lobby.round })} color="primary" />
       </Box>
 
       <Box
@@ -51,7 +53,7 @@ export default function VotingResults({
           color={teamWon ? 'success.dark' : 'error.dark'}
           fontWeight="bold"
         >
-          {teamWon ? 'Time Venceu!' : 'Impostor Venceu!'}
+          {teamWon ? t('results.teamWon') : t('results.impostorWon')}
         </Typography>
         <Typography
           variant="body1"
@@ -59,20 +61,20 @@ export default function VotingResults({
           sx={{ mt: 1 }}
         >
           {teamWon
-            ? 'O impostor foi descoberto!'
-            : 'O impostor enganou a todos!'}
+            ? t('results.impostorDiscovered')
+            : t('results.impostorFooledEveryone')}
         </Typography>
       </Box>
 
       <Box sx={{ bgcolor: 'grey.100', p: 2, borderRadius: 1, mb: 3 }}>
         <Typography variant="body2" color="text.secondary">
-          O impostor era:
+          {t('results.theImpostorWas')}
         </Typography>
         <Typography variant="h5" fontWeight="bold">
           {impostor?.name}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          A palavra secreta era:
+          {t('results.theSecretWordWas')}
         </Typography>
         <Typography variant="h6" fontWeight="bold">
           {lobby.currentWord}
@@ -80,7 +82,7 @@ export default function VotingResults({
       </Box>
 
       <Typography variant="subtitle1" gutterBottom>
-        Contagem de Votos
+        {t('results.voteCount')}
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
@@ -97,14 +99,16 @@ export default function VotingResults({
           >
             <ListItemText
               primary={result.name}
-              secondary={`${result.votes} voto${result.votes !== 1 ? 's' : ''}`}
+              secondary={result.votes === 1
+                ? t('results.voteSingular', { count: result.votes })
+                : t('results.votePlural', { count: result.votes })}
             />
             <Box sx={{ display: 'flex', gap: 1 }}>
               {index === 0 && result.votes > 0 && (
-                <Chip label="Mais votado" color="warning" size="small" />
+                <Chip label={t('results.mostVoted')} color="warning" size="small" />
               )}
               {result.isImpostor && (
-                <Chip label="Impostor" color="error" size="small" />
+                <Chip label={t('results.impostor')} color="error" size="small" />
               )}
             </Box>
           </ListItem>
@@ -119,7 +123,7 @@ export default function VotingResults({
           onClick={onNextRound}
           sx={{ mt: 3 }}
         >
-          Próximo Round
+          {t('results.nextRound')}
         </Button>
       )}
     </Paper>

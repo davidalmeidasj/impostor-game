@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Box,
   Typography,
@@ -26,13 +27,14 @@ export default function LobbyWaiting({
   onLeaveLobby,
   error,
 }: LobbyWaitingProps) {
+  const t = useTranslations();
   const isAdmin = lobby.createdBy === currentSession;
   const canStart = lobby.players.length >= 3;
 
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
       <Typography variant="h5" gutterBottom textAlign="center">
-        Waiting Room
+        {t('lobby.waitingRoom')}
       </Typography>
 
       <Box
@@ -45,7 +47,7 @@ export default function LobbyWaiting({
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          Lobby Code
+          {t('lobby.lobbyCode')}
         </Typography>
         <Typography variant="h4" fontWeight="bold" fontFamily="monospace">
           {lobby.lobbyId}
@@ -59,7 +61,7 @@ export default function LobbyWaiting({
       )}
 
       <Typography variant="subtitle1" gutterBottom>
-        Players ({lobby.players.length}/?)
+        {t('lobby.players', { count: lobby.players.length })}
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
@@ -72,7 +74,7 @@ export default function LobbyWaiting({
 
       {!canStart && (
         <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
-          Minimum 3 players required to start the game
+          {t('lobby.minPlayersRequired')}
         </Alert>
       )}
 
@@ -85,7 +87,7 @@ export default function LobbyWaiting({
             onClick={onStartGame}
             disabled={!canStart}
           >
-            Start Game
+            {t('lobby.startGame')}
           </Button>
         )}
         <Button
@@ -94,7 +96,7 @@ export default function LobbyWaiting({
           fullWidth
           onClick={onLeaveLobby}
         >
-          Leave Lobby
+          {t('lobby.leaveLobby')}
         </Button>
       </Box>
     </Paper>

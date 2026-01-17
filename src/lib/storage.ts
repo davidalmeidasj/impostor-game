@@ -1,8 +1,11 @@
 import { Redis } from '@upstash/redis';
+import fs from 'fs';
+import path from 'path';
 import { Lobby, User, WordCategories } from '@/types';
 
 const LOBBIES_KEY = 'impostor:lobbies';
 const USERS_KEY = 'impostor:users';
+const VALID_LOCALES = ['en', 'pt-BR', 'es'];
 
 // In-memory fallback for local development
 let inMemoryLobbies: Lobby[] = [];
@@ -55,17 +58,20 @@ export async function writeUsers(users: User[]): Promise<void> {
   }
 }
 
-export async function readWords(): Promise<WordCategories> {
-  return {
-    superheroes: ['Superman', 'Batman', 'Spider-Man', 'Wonder Woman', 'Iron Man', 'Thor', 'Hulk', 'Captain America'],
-    brazilian_states: ['São Paulo', 'Rio de Janeiro', 'Bahia', 'Minas Gerais', 'Paraná', 'Santa Catarina', 'Ceará', 'Pernambuco'],
-    objects: ['Chair', 'Phone', 'Backpack', 'Laptop', 'Book', 'Umbrella', 'Watch', 'Sunglasses'],
-    human_body_parts: ['Arm', 'Leg', 'Heart', 'Brain', 'Stomach', 'Kidney', 'Lung', 'Eye'],
-    animals: ['Dog', 'Cat', 'Elephant', 'Lion', 'Eagle', 'Dolphin', 'Snake', 'Penguin'],
-    food: ['Pizza', 'Hamburger', 'Sushi', 'Pasta', 'Taco', 'Salad', 'Ice Cream', 'Chocolate'],
-    countries: ['Brazil', 'Japan', 'France', 'Germany', 'Australia', 'Canada', 'Mexico', 'Italy'],
-    sports: ['Soccer', 'Basketball', 'Tennis', 'Swimming', 'Volleyball', 'Golf', 'Boxing', 'Cycling'],
-  };
+export async function readWords(locale: string = 'en'): Promise<WordCategories> {
+  // Validate locale
+  const safeLocale = VALID_LOCALES.includes(locale) ? locale : 'en';
+
+  try {
+    const wordsPath = path.join(process.cwd(), 'data', 'words', `${safeLocale}.json`);
+    const wordsData = fs.readFileSync(wordsPath, 'utf-8');
+    return JSON.parse(wordsData) as WordCategories;
+  } catch {
+    // Fallback to English if locale file not found
+    const wordsPath = path.join(process.cwd(), 'data', 'words', 'en.json');
+    const wordsData = fs.readFileSync(wordsPath, 'utf-8');
+    return JSON.parse(wordsData) as WordCategories;
+  }
 }
 
 export function generateId(): string {

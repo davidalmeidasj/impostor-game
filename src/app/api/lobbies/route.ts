@@ -12,9 +12,11 @@ export async function GET() {
   }
 }
 
+const VALID_LOCALES = ['en', 'pt-BR', 'es'];
+
 export async function POST(request: NextRequest) {
   try {
-    const { playerSession, playerName } = await request.json();
+    const { playerSession, playerName, locale } = await request.json();
 
     if (!playerSession || !playerName) {
       return NextResponse.json(
@@ -33,6 +35,9 @@ export async function POST(request: NextRequest) {
       votedFor: null,
     };
 
+    // Validate and default locale
+    const safeLocale = VALID_LOCALES.includes(locale) ? locale : 'en';
+
     const newLobby: Lobby = {
       lobbyId: generateId(),
       createdBy: playerSession,
@@ -41,6 +46,7 @@ export async function POST(request: NextRequest) {
       currentWord: null,
       round: 0,
       winner: null,
+      locale: safeLocale,
     };
 
     lobbies.push(newLobby);

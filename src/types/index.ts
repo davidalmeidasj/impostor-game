@@ -14,6 +14,7 @@ export interface Lobby {
   currentWord: string | null;
   round: number;
   winner: 'impostor' | 'team' | null; // who won the round
+  locale: string; // language for words (en, pt-BR, es)
 }
 
 export interface User {

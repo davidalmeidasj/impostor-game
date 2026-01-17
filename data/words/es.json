@@ -1,0 +1,10 @@
+{
+  "superheroes": ["Superman", "Batman", "Hombre Araña", "Mujer Maravilla", "Iron Man", "Thor", "Hulk", "Capitán América"],
+  "spanish_regions": ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga", "Zaragoza", "Murcia"],
+  "objects": ["Silla", "Teléfono", "Mochila", "Portátil", "Libro", "Paraguas", "Reloj", "Gafas de Sol"],
+  "human_body_parts": ["Brazo", "Pierna", "Corazón", "Cerebro", "Estómago", "Riñón", "Pulmón", "Ojo"],
+  "animals": ["Perro", "Gato", "Elefante", "León", "Águila", "Delfín", "Serpiente", "Pingüino"],
+  "food": ["Pizza", "Hamburguesa", "Sushi", "Pasta", "Taco", "Ensalada", "Helado", "Chocolate"],
+  "countries": ["Brasil", "Japón", "Francia", "Alemania", "Australia", "Canadá", "México", "Italia"],
+  "sports": ["Fútbol", "Baloncesto", "Tenis", "Natación", "Voleibol", "Golf", "Boxeo", "Ciclismo"]
+}

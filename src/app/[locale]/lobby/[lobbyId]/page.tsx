@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
+import { useTranslations } from 'next-intl';
 import { useLobby } from '@/hooks/useLobby';
 import LobbyWaiting from '@/components/LobbyWaiting';
 import GameBoard from '@/components/GameBoard';
@@ -12,7 +13,9 @@ import VotingResults from '@/components/VotingResults';
 export default function LobbyPage() {
   const params = useParams();
   const router = useRouter();
+  const t = useTranslations();
   const lobbyId = params.lobbyId as string;
+  const locale = params.locale as string;
   const { lobby, loading, error } = useLobby(lobbyId);
   const [currentSession, setCurrentSession] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -20,11 +23,11 @@ export default function LobbyPage() {
   useEffect(() => {
     const session = sessionStorage.getItem('playerSession');
     if (!session) {
-      router.push('/');
+      router.push(`/${locale}`);
       return;
     }
     setCurrentSession(session);
-  }, [router]);
+  }, [router, locale]);
 
   const handleStartGame = async () => {
     setActionError(null);
@@ -37,10 +40,10 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to start game');
+        throw new Error(data.error || t('errors.failedToStartGame'));
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+      setActionError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     }
   };
 
@@ -55,10 +58,10 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to start voting');
+        throw new Error(data.error || t('errors.failedToStartVoting'));
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+      setActionError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     }
   };
 
@@ -73,10 +76,10 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to vote');
+        throw new Error(data.error || t('errors.failedToVote'));
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+      setActionError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     }
   };
 
@@ -91,10 +94,10 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to end voting');
+        throw new Error(data.error || t('errors.failedToEndVoting'));
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+      setActionError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     }
   };
 
@@ -109,10 +112,10 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to start next round');
+        throw new Error(data.error || t('errors.failedToStartNextRound'));
       }
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+      setActionError(err instanceof Error ? err.message : t('errors.somethingWentWrong'));
     }
   };
 
@@ -123,9 +126,9 @@ export default function LobbyPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playerSession: currentSession }),
       });
-      router.push('/');
+      router.push(`/${locale}`);
     } catch {
-      router.push('/');
+      router.push(`/${locale}`);
     }
   };
 
@@ -158,14 +161,14 @@ export default function LobbyPage() {
           gap: 2,
         }}
       >
-        <Alert severity="error">{error || 'Lobby not found'}</Alert>
+        <Alert severity="error">{error || t('lobby.notFound')}</Alert>
         <Typography
           variant="body2"
           color="primary"
           sx={{ cursor: 'pointer' }}
-          onClick={() => router.push('/')}
+          onClick={() => router.push(`/${locale}`)}
         >
-          Voltar para o início
+          {t('lobby.backToHome')}
         </Typography>
       </Box>
     );
@@ -188,14 +191,14 @@ export default function LobbyPage() {
           gap: 2,
         }}
       >
-        <Alert severity="error">Você não está neste lobby</Alert>
+        <Alert severity="error">{t('lobby.notInLobby')}</Alert>
         <Typography
           variant="body2"
           color="primary"
           sx={{ cursor: 'pointer' }}
-          onClick={() => router.push('/')}
+          onClick={() => router.push(`/${locale}`)}
         >
-          Voltar para o início
+          {t('lobby.backToHome')}
         </Typography>
       </Box>
     );

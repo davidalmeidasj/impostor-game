@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   Box,
   Typography,
@@ -30,6 +31,7 @@ export default function VotingBoard({
   onVote,
   onEndVoting,
 }: VotingBoardProps) {
+  const t = useTranslations();
   const isAdmin = lobby.createdBy === currentSession;
   const hasVoted = currentPlayer.votedFor !== null;
   const votedCount = lobby.players.filter((p) => p.votedFor !== null).length;
@@ -38,24 +40,24 @@ export default function VotingBoard({
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h5">Votação</Typography>
-        <Chip label={`Round ${lobby.round}`} color="primary" />
+        <Typography variant="h5">{t('voting.title')}</Typography>
+        <Chip label={t('game.round', { round: lobby.round })} color="primary" />
       </Box>
 
       <Alert severity="info" sx={{ mb: 3 }}>
         {currentPlayer.isImpostor
-          ? 'Você é o impostor! Tente não ser descoberto.'
-          : `Sua palavra era: ${currentPlayer.assignedWord}`}
+          ? t('voting.youAreImpostorHint')
+          : t('voting.yourWordWas', { word: currentPlayer.assignedWord || '' })}
       </Alert>
 
       <Box sx={{ mb: 2, textAlign: 'center' }}>
         <Typography variant="body2" color="text.secondary">
-          Votos: {votedCount} / {totalPlayers}
+          {t('voting.votesCount', { current: votedCount, total: totalPlayers })}
         </Typography>
       </Box>
 
       <Typography variant="subtitle1" gutterBottom>
-        Quem você acha que é o impostor?
+        {t('voting.whoIsImpostor')}
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
@@ -80,7 +82,7 @@ export default function VotingBoard({
               >
                 <ListItemText primary={player.name} />
                 {currentPlayer.votedFor === player.playerSession && (
-                  <Chip label="Seu voto" color="primary" size="small" />
+                  <Chip label={t('voting.yourVote')} color="primary" size="small" />
                 )}
               </ListItemButton>
             </ListItem>
@@ -89,7 +91,7 @@ export default function VotingBoard({
 
       {hasVoted && (
         <Alert severity="success" sx={{ mt: 2 }}>
-          Voto registrado! Aguardando outros jogadores...
+          {t('voting.voteRegistered')}
         </Alert>
       )}
 
@@ -101,7 +103,7 @@ export default function VotingBoard({
           onClick={onEndVoting}
           sx={{ mt: 3 }}
         >
-          Encerrar Votação
+          {t('voting.endVoting')}
         </Button>
       )}
     </Paper>
