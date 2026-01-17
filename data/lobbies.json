@@ -1,0 +1,35 @@
+[
+  {
+    "lobbyId": "224u3z4",
+    "createdBy": "sicjoiu",
+    "status": "in_progress",
+    "players": [
+      {
+        "playerSession": "sicjoiu",
+        "name": "Brian Abacate",
+        "isImpostor": true,
+        "assignedWord": null
+      },
+      {
+        "playerSession": "j0jv3cr",
+        "name": "abacfate teste",
+        "isImpostor": false,
+        "assignedWord": "Hulk"
+      },
+      {
+        "playerSession": "f0rv92u",
+        "name": "abacttttt",
+        "isImpostor": false,
+        "assignedWord": "Hulk"
+      },
+      {
+        "playerSession": "32vrgbz",
+        "name": "qwe qsadsa",
+        "isImpostor": false,
+        "assignedWord": "Hulk"
+      }
+    ],
+    "currentWord": "Hulk",
+    "round": 4
+  }
+]

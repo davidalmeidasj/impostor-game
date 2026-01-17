@@ -1,0 +1,10 @@
+{
+  "superheroes": ["Superman", "Batman", "Spider-Man", "Wonder Woman", "Iron Man", "Thor", "Hulk", "Captain America"],
+  "brazilian_states": ["São Paulo", "Rio de Janeiro", "Bahia", "Minas Gerais", "Paraná", "Santa Catarina", "Ceará", "Pernambuco"],
+  "objects": ["Chair", "Phone", "Backpack", "Laptop", "Book", "Umbrella", "Watch", "Sunglasses"],
+  "human_body_parts": ["Arm", "Leg", "Heart", "Brain", "Stomach", "Kidney", "Lung", "Eye"],
+  "animals": ["Dog", "Cat", "Elephant", "Lion", "Eagle", "Dolphin", "Snake", "Penguin"],
+  "food": ["Pizza", "Hamburger", "Sushi", "Pasta", "Taco", "Salad", "Ice Cream", "Chocolate"],
+  "countries": ["Brazil", "Japan", "France", "Germany", "Australia", "Canada", "Mexico", "Italy"],
+  "sports": ["Soccer", "Basketball", "Tennis", "Swimming", "Volleyball", "Golf", "Boxing", "Cycling"]
+}
