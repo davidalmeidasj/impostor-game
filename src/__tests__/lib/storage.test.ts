@@ -1,8 +1,12 @@
-import { generateId } from '@/lib/storage';
+// Mock @vercel/kv before importing storage
+jest.mock('@vercel/kv', () => ({
+  kv: {
+    get: jest.fn(),
+    set: jest.fn(),
+  },
+}));
 
-// Note: readLobbies, writeLobbies, readUsers, writeUsers, readWords
-// are file system operations that would require mocking fs in a real test.
-// For simplicity, we test the pure functions here.
+import { generateId } from '@/lib/storage';
 
 describe('Storage Utilities', () => {
   describe('generateId', () => {
