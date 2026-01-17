@@ -6,6 +6,8 @@ import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import { useLobby } from '@/hooks/useLobby';
 import LobbyWaiting from '@/components/LobbyWaiting';
 import GameBoard from '@/components/GameBoard';
+import VotingBoard from '@/components/VotingBoard';
+import VotingResults from '@/components/VotingResults';
 
 export default function LobbyPage() {
   const params = useParams();
@@ -42,7 +44,61 @@ export default function LobbyPage() {
     }
   };
 
-  const handleRestartGame = async () => {
+  const handleStartVoting = async () => {
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/lobbies/${lobbyId}/start-voting`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerSession: currentSession }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to start voting');
+      }
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  };
+
+  const handleVote = async (votedFor: string) => {
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/lobbies/${lobbyId}/vote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerSession: currentSession, votedFor }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to vote');
+      }
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  };
+
+  const handleEndVoting = async () => {
+    setActionError(null);
+    try {
+      const response = await fetch(`/api/lobbies/${lobbyId}/end-voting`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerSession: currentSession }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to end voting');
+      }
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  };
+
+  const handleNextRound = async () => {
     setActionError(null);
     try {
       const response = await fetch(`/api/lobbies/${lobbyId}/restart`, {
@@ -53,7 +109,7 @@ export default function LobbyPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to restart game');
+        throw new Error(data.error || 'Failed to start next round');
       }
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Something went wrong');
@@ -109,7 +165,7 @@ export default function LobbyPage() {
           sx={{ cursor: 'pointer' }}
           onClick={() => router.push('/')}
         >
-          Go back to home
+          Voltar para o início
         </Typography>
       </Box>
     );
@@ -132,18 +188,63 @@ export default function LobbyPage() {
           gap: 2,
         }}
       >
-        <Alert severity="error">You are not in this lobby</Alert>
+        <Alert severity="error">Você não está neste lobby</Alert>
         <Typography
           variant="body2"
           color="primary"
           sx={{ cursor: 'pointer' }}
           onClick={() => router.push('/')}
         >
-          Go back to home
+          Voltar para o início
         </Typography>
       </Box>
     );
   }
+
+  const renderContent = () => {
+    switch (lobby.status) {
+      case 'waiting':
+        return (
+          <LobbyWaiting
+            lobby={lobby}
+            currentSession={currentSession}
+            onStartGame={handleStartGame}
+            onLeaveLobby={handleLeaveLobby}
+            error={actionError || undefined}
+          />
+        );
+      case 'in_progress':
+        return (
+          <GameBoard
+            lobby={lobby}
+            currentPlayer={currentPlayer}
+            currentSession={currentSession}
+            onStartVoting={handleStartVoting}
+            onLeaveLobby={handleLeaveLobby}
+          />
+        );
+      case 'voting':
+        return (
+          <VotingBoard
+            lobby={lobby}
+            currentPlayer={currentPlayer}
+            currentSession={currentSession}
+            onVote={handleVote}
+            onEndVoting={handleEndVoting}
+          />
+        );
+      case 'results':
+        return (
+          <VotingResults
+            lobby={lobby}
+            currentSession={currentSession}
+            onNextRound={handleNextRound}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <Box
@@ -156,23 +257,7 @@ export default function LobbyPage() {
         p: 2,
       }}
     >
-      {lobby.status === 'waiting' ? (
-        <LobbyWaiting
-          lobby={lobby}
-          currentSession={currentSession}
-          onStartGame={handleStartGame}
-          onLeaveLobby={handleLeaveLobby}
-          error={actionError || undefined}
-        />
-      ) : (
-        <GameBoard
-          lobby={lobby}
-          currentPlayer={currentPlayer}
-          currentSession={currentSession}
-          onRestartGame={handleRestartGame}
-          onLeaveLobby={handleLeaveLobby}
-        />
-      )}
+      {renderContent()}
     </Box>
   );
 }

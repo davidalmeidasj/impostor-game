@@ -50,6 +50,7 @@ export async function POST(
     lobby.currentWord = selectedWord;
     lobby.status = 'in_progress';
     lobby.round = 1;
+    lobby.winner = null;
 
     await writeLobbies(lobbies);
 

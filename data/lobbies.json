@@ -8,28 +8,66 @@
         "playerSession": "sicjoiu",
         "name": "Brian Abacate",
         "isImpostor": true,
-        "assignedWord": null
+        "assignedWord": null,
+        "votedFor": null
       },
       {
         "playerSession": "j0jv3cr",
         "name": "abacfate teste",
         "isImpostor": false,
-        "assignedWord": "Hulk"
+        "assignedWord": "Hulk",
+        "votedFor": null
       },
       {
         "playerSession": "f0rv92u",
         "name": "abacttttt",
         "isImpostor": false,
-        "assignedWord": "Hulk"
+        "assignedWord": "Hulk",
+        "votedFor": null
       },
       {
         "playerSession": "32vrgbz",
         "name": "qwe qsadsa",
         "isImpostor": false,
-        "assignedWord": "Hulk"
+        "assignedWord": "Hulk",
+        "votedFor": null
       }
     ],
     "currentWord": "Hulk",
-    "round": 4
+    "round": 4,
+    "winner": null
+  },
+  {
+    "lobbyId": "bhxxyts",
+    "createdBy": "fqrrl8h",
+    "status": "in_progress",
+    "players": [
+      {
+        "playerSession": "fqrrl8h",
+        "name": "asasdasd",
+        "isImpostor": true,
+        "assignedWord": null
+      },
+      {
+        "playerSession": "9eid89r",
+        "name": "bhxxyts",
+        "isImpostor": false,
+        "assignedWord": "Minas Gerais"
+      },
+      {
+        "playerSession": "qst93cp",
+        "name": "sdasdasdsad",
+        "isImpostor": false,
+        "assignedWord": "Minas Gerais"
+      },
+      {
+        "playerSession": "5fkptho",
+        "name": "wqewqewqe",
+        "isImpostor": false,
+        "assignedWord": "Minas Gerais"
+      }
+    ],
+    "currentWord": "Minas Gerais",
+    "round": 1
   }
 ]

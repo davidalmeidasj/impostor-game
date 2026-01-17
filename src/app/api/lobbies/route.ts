@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       name: playerName,
       isImpostor: false,
       assignedWord: null,
+      votedFor: null,
     };
 
     const newLobby: Lobby = {
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
       players: [player],
       currentWord: null,
       round: 0,
+      winner: null,
     };
 
     lobbies.push(newLobby);

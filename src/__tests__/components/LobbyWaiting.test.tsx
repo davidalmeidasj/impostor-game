@@ -12,9 +12,11 @@ describe('LobbyWaiting', () => {
       name: `Player ${i + 1}`,
       isImpostor: false,
       assignedWord: null,
+      votedFor: null,
     })),
     currentWord: null,
     round: 0,
+    winner: null,
   });
 
   it('should display lobby code', () => {

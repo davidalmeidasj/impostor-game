@@ -31,7 +31,7 @@ export async function POST(
     }
 
     // Check if game is already in progress
-    if (lobby.status === 'in_progress') {
+    if (lobby.status !== 'waiting') {
       return NextResponse.json(
         { error: 'Game is already in progress' },
         { status: 400 }
@@ -43,6 +43,7 @@ export async function POST(
       name: playerName,
       isImpostor: false,
       assignedWord: null,
+      votedFor: null,
     };
 
     lobby.players.push(newPlayer);

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readLobbies, writeLobbies, readWords } from '@/lib/storage';
-import { selectRandomImpostor, selectRandomWord, assignWordsToPlayers } from '@/lib/game';
+import { readLobbies, writeLobbies } from '@/lib/storage';
+import { determineWinner } from '@/lib/game';
 
 export async function POST(
   request: NextRequest,
@@ -24,31 +24,31 @@ export async function POST(
       return NextResponse.json({ error: 'Lobby not found' }, { status: 404 });
     }
 
-    // Only admin can restart the game
+    // Only admin can end voting
     if (lobby.createdBy !== playerSession) {
       return NextResponse.json(
-        { error: 'Only the lobby admin can restart the game' },
+        { error: 'Only the lobby admin can end voting' },
         { status: 403 }
       );
     }
 
-    // Select new random word and impostor
-    const words = await readWords();
-    const selectedWord = selectRandomWord(words);
-    const impostorIndex = selectRandomImpostor(lobby.players);
+    // Can only end voting during voting phase
+    if (lobby.status !== 'voting') {
+      return NextResponse.json(
+        { error: 'Voting is not active' },
+        { status: 400 }
+      );
+    }
 
-    // Assign new words to players
-    lobby.players = assignWordsToPlayers(lobby.players, selectedWord, impostorIndex);
-    lobby.currentWord = selectedWord;
-    lobby.status = 'in_progress';
-    lobby.round += 1;
-    lobby.winner = null;
+    // Determine winner and update status
+    lobby.winner = determineWinner(lobby.players);
+    lobby.status = 'results';
 
     await writeLobbies(lobbies);
 
     return NextResponse.json(lobby);
   } catch (error) {
-    console.error('Error restarting game:', error);
-    return NextResponse.json({ error: 'Failed to restart game' }, { status: 500 });
+    console.error('Error ending voting:', error);
+    return NextResponse.json({ error: 'Failed to end voting' }, { status: 500 });
   }
 }

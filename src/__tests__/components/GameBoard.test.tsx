@@ -8,11 +8,12 @@ describe('GameBoard', () => {
     createdBy: 'admin-1',
     status: 'in_progress',
     players: [
-      { playerSession: 'admin-1', name: 'John', isImpostor: false, assignedWord: 'Pizza' },
-      { playerSession: 'player-2', name: 'Jane', isImpostor: true, assignedWord: null },
+      { playerSession: 'admin-1', name: 'John', isImpostor: false, assignedWord: 'Pizza', votedFor: null },
+      { playerSession: 'player-2', name: 'Jane', isImpostor: true, assignedWord: null, votedFor: null },
     ],
     currentWord: 'Pizza',
     round: 1,
+    winner: null,
   };
 
   const mockNonImpostorPlayer: Player = {
@@ -20,6 +21,7 @@ describe('GameBoard', () => {
     name: 'John',
     isImpostor: false,
     assignedWord: 'Pizza',
+    votedFor: null,
   };
 
   const mockImpostorPlayer: Player = {
@@ -27,6 +29,7 @@ describe('GameBoard', () => {
     name: 'Jane',
     isImpostor: true,
     assignedWord: null,
+    votedFor: null,
   };
 
   it('should display the secret word for non-impostor', () => {
@@ -35,13 +38,13 @@ describe('GameBoard', () => {
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );
 
     expect(screen.getByText('Pizza')).toBeInTheDocument();
-    expect(screen.getByText('Your secret word is:')).toBeInTheDocument();
+    expect(screen.getByText('Sua palavra secreta é:')).toBeInTheDocument();
   });
 
   it('should display impostor message for impostor', () => {
@@ -50,12 +53,12 @@ describe('GameBoard', () => {
         lobby={mockLobby}
         currentPlayer={mockImpostorPlayer}
         currentSession="player-2"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );
 
-    expect(screen.getByText('You are the Impostor!')).toBeInTheDocument();
+    expect(screen.getByText('Você é o Impostor!')).toBeInTheDocument();
     expect(screen.queryByText('Pizza')).not.toBeInTheDocument();
   });
 
@@ -65,7 +68,7 @@ describe('GameBoard', () => {
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );
@@ -73,63 +76,63 @@ describe('GameBoard', () => {
     expect(screen.getByText('Round 1')).toBeInTheDocument();
   });
 
-  it('should show New Round button for admin', () => {
+  it('should show Iniciar Votação button for admin', () => {
     render(
       <GameBoard
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );
 
-    expect(screen.getByText('New Round')).toBeInTheDocument();
+    expect(screen.getByText('Iniciar Votação')).toBeInTheDocument();
   });
 
-  it('should not show New Round button for non-admin', () => {
+  it('should not show Iniciar Votação button for non-admin', () => {
     render(
       <GameBoard
         lobby={mockLobby}
         currentPlayer={mockImpostorPlayer}
         currentSession="player-2"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );
 
-    expect(screen.queryByText('New Round')).not.toBeInTheDocument();
+    expect(screen.queryByText('Iniciar Votação')).not.toBeInTheDocument();
   });
 
-  it('should call onRestartGame when New Round is clicked', () => {
-    const onRestartGame = jest.fn();
+  it('should call onStartVoting when Iniciar Votação is clicked', () => {
+    const onStartVoting = jest.fn();
     render(
       <GameBoard
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={onRestartGame}
+        onStartVoting={onStartVoting}
         onLeaveLobby={jest.fn()}
       />
     );
 
-    fireEvent.click(screen.getByText('New Round'));
-    expect(onRestartGame).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByText('Iniciar Votação'));
+    expect(onStartVoting).toHaveBeenCalledTimes(1);
   });
 
-  it('should call onLeaveLobby when Leave Lobby is clicked', () => {
+  it('should call onLeaveLobby when Sair do Lobby is clicked', () => {
     const onLeaveLobby = jest.fn();
     render(
       <GameBoard
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={onLeaveLobby}
       />
     );
 
-    fireEvent.click(screen.getByText('Leave Lobby'));
+    fireEvent.click(screen.getByText('Sair do Lobby'));
     expect(onLeaveLobby).toHaveBeenCalledTimes(1);
   });
 
@@ -139,7 +142,7 @@ describe('GameBoard', () => {
         lobby={mockLobby}
         currentPlayer={mockNonImpostorPlayer}
         currentSession="admin-1"
-        onRestartGame={jest.fn()}
+        onStartVoting={jest.fn()}
         onLeaveLobby={jest.fn()}
       />
     );

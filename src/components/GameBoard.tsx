@@ -8,7 +8,7 @@ interface GameBoardProps {
   lobby: Lobby;
   currentPlayer: Player;
   currentSession: string;
-  onRestartGame: () => void;
+  onStartVoting: () => void;
   onLeaveLobby: () => void;
 }
 
@@ -16,7 +16,7 @@ export default function GameBoard({
   lobby,
   currentPlayer,
   currentSession,
-  onRestartGame,
+  onStartVoting,
   onLeaveLobby,
 }: GameBoardProps) {
   const isAdmin = lobby.createdBy === currentSession;
@@ -24,7 +24,7 @@ export default function GameBoard({
   return (
     <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h5">Game in Progress</Typography>
+        <Typography variant="h5">Jogo em Andamento</Typography>
         <Chip label={`Round ${lobby.round}`} color="primary" />
       </Box>
 
@@ -40,16 +40,16 @@ export default function GameBoard({
         {currentPlayer.isImpostor ? (
           <>
             <Typography variant="h4" color="error.dark" fontWeight="bold">
-              You are the Impostor!
+              Você é o Impostor!
             </Typography>
             <Typography variant="body1" color="error.dark" sx={{ mt: 1 }}>
-              Try to guess the secret word without getting caught
+              Tente adivinhar a palavra secreta sem ser descoberto
             </Typography>
           </>
         ) : (
           <>
             <Typography variant="body1" color="success.dark">
-              Your secret word is:
+              Sua palavra secreta é:
             </Typography>
             <Typography
               variant="h3"
@@ -64,7 +64,7 @@ export default function GameBoard({
       </Box>
 
       <Typography variant="subtitle1" gutterBottom>
-        Players ({lobby.players.length})
+        Jogadores ({lobby.players.length})
       </Typography>
 
       <Divider sx={{ mb: 2 }} />
@@ -79,11 +79,11 @@ export default function GameBoard({
         {isAdmin && (
           <Button
             variant="contained"
-            color="primary"
+            color="warning"
             fullWidth
-            onClick={onRestartGame}
+            onClick={onStartVoting}
           >
-            New Round
+            Iniciar Votação
           </Button>
         )}
         <Button
@@ -92,7 +92,7 @@ export default function GameBoard({
           fullWidth
           onClick={onLeaveLobby}
         >
-          Leave Lobby
+          Sair do Lobby
         </Button>
       </Box>
     </Paper>

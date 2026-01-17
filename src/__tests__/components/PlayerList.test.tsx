@@ -4,9 +4,9 @@ import { Player } from '@/types';
 
 describe('PlayerList', () => {
   const mockPlayers: Player[] = [
-    { playerSession: 'admin-1', name: 'Admin Player', isImpostor: false, assignedWord: 'Word' },
-    { playerSession: 'player-2', name: 'Regular Player', isImpostor: false, assignedWord: 'Word' },
-    { playerSession: 'player-3', name: 'Another Player', isImpostor: true, assignedWord: null },
+    { playerSession: 'admin-1', name: 'Admin Player', isImpostor: false, assignedWord: 'Word', votedFor: null },
+    { playerSession: 'player-2', name: 'Regular Player', isImpostor: false, assignedWord: 'Word', votedFor: null },
+    { playerSession: 'player-3', name: 'Another Player', isImpostor: true, assignedWord: null, votedFor: null },
   ];
 
   it('should render all players', () => {

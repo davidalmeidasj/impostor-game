@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readLobbies, writeLobbies, readWords } from '@/lib/storage';
-import { selectRandomImpostor, selectRandomWord, assignWordsToPlayers } from '@/lib/game';
+import { readLobbies, writeLobbies } from '@/lib/storage';
 
 export async function POST(
   request: NextRequest,
@@ -24,31 +23,35 @@ export async function POST(
       return NextResponse.json({ error: 'Lobby not found' }, { status: 404 });
     }
 
-    // Only admin can restart the game
+    // Only admin can start voting
     if (lobby.createdBy !== playerSession) {
       return NextResponse.json(
-        { error: 'Only the lobby admin can restart the game' },
+        { error: 'Only the lobby admin can start voting' },
         { status: 403 }
       );
     }
 
-    // Select new random word and impostor
-    const words = await readWords();
-    const selectedWord = selectRandomWord(words);
-    const impostorIndex = selectRandomImpostor(lobby.players);
+    // Can only start voting when game is in progress
+    if (lobby.status !== 'in_progress') {
+      return NextResponse.json(
+        { error: 'Game must be in progress to start voting' },
+        { status: 400 }
+      );
+    }
 
-    // Assign new words to players
-    lobby.players = assignWordsToPlayers(lobby.players, selectedWord, impostorIndex);
-    lobby.currentWord = selectedWord;
-    lobby.status = 'in_progress';
-    lobby.round += 1;
+    // Reset all votes and change status
+    lobby.players = lobby.players.map((player) => ({
+      ...player,
+      votedFor: null,
+    }));
+    lobby.status = 'voting';
     lobby.winner = null;
 
     await writeLobbies(lobbies);
 
     return NextResponse.json(lobby);
   } catch (error) {
-    console.error('Error restarting game:', error);
-    return NextResponse.json({ error: 'Failed to restart game' }, { status: 500 });
+    console.error('Error starting voting:', error);
+    return NextResponse.json({ error: 'Failed to start voting' }, { status: 500 });
   }
 }
