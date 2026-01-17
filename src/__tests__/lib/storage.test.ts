@@ -1,9 +1,9 @@
-// Mock @vercel/kv before importing storage
-jest.mock('@vercel/kv', () => ({
-  kv: {
+// Mock @upstash/redis before importing storage
+jest.mock('@upstash/redis', () => ({
+  Redis: jest.fn().mockImplementation(() => ({
     get: jest.fn(),
     set: jest.fn(),
-  },
+  })),
 }));
 
 import { generateId } from '@/lib/storage';

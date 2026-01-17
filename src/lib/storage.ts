@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { Lobby, User, WordCategories } from '@/types';
 
 const LOBBIES_KEY = 'impostor:lobbies';
@@ -8,44 +8,54 @@ const USERS_KEY = 'impostor:users';
 let inMemoryLobbies: Lobby[] = [];
 let inMemoryUsers: User[] = [];
 
-function isVercelKVConfigured(): boolean {
-  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+// Create Redis client if environment variables are set
+function getRedisClient(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (url && token) {
+    return new Redis({ url, token });
+  }
+  return null;
 }
 
 export async function readLobbies(): Promise<Lobby[]> {
-  if (isVercelKVConfigured()) {
-    const lobbies = await kv.get<Lobby[]>(LOBBIES_KEY);
+  const redis = getRedisClient();
+  if (redis) {
+    const lobbies = await redis.get<Lobby[]>(LOBBIES_KEY);
     return lobbies || [];
   }
   return inMemoryLobbies;
 }
 
 export async function writeLobbies(lobbies: Lobby[]): Promise<void> {
-  if (isVercelKVConfigured()) {
-    await kv.set(LOBBIES_KEY, lobbies);
+  const redis = getRedisClient();
+  if (redis) {
+    await redis.set(LOBBIES_KEY, lobbies);
   } else {
     inMemoryLobbies = lobbies;
   }
 }
 
 export async function readUsers(): Promise<User[]> {
-  if (isVercelKVConfigured()) {
-    const users = await kv.get<User[]>(USERS_KEY);
+  const redis = getRedisClient();
+  if (redis) {
+    const users = await redis.get<User[]>(USERS_KEY);
     return users || [];
   }
   return inMemoryUsers;
 }
 
 export async function writeUsers(users: User[]): Promise<void> {
-  if (isVercelKVConfigured()) {
-    await kv.set(USERS_KEY, users);
+  const redis = getRedisClient();
+  if (redis) {
+    await redis.set(USERS_KEY, users);
   } else {
     inMemoryUsers = users;
   }
 }
 
 export async function readWords(): Promise<WordCategories> {
-  // Words are static, no need for database storage
   return {
     superheroes: ['Superman', 'Batman', 'Spider-Man', 'Wonder Woman', 'Iron Man', 'Thor', 'Hulk', 'Captain America'],
     brazilian_states: ['São Paulo', 'Rio de Janeiro', 'Bahia', 'Minas Gerais', 'Paraná', 'Santa Catarina', 'Ceará', 'Pernambuco'],
